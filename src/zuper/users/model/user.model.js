@@ -6,7 +6,7 @@ const userSchema = new schema({
     type: Number,
     required: true,
   },
-  empCode: { type: String, required: true },
+  empCode: { type: Number, unique: true },
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
   email: {

@@ -17,7 +17,8 @@ const isEmailValid = (email) => {
 }
 
 const userRoles = (values) => {
-    return values == 1 || values == 2;
+    if( values == 1 || values == 2 || values == 3) return true;
+    else return false; 
 }
 
 module.exports = { isEmailValid, userRoles }
