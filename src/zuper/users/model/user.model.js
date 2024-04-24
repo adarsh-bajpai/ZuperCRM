@@ -64,6 +64,9 @@ const userSchema = new schema({
     },
   },
   sendWelcomeEmail: { type: Boolean, default: false },
+  accountActivation: {
+    type: Boolean, default: false
+  }
 });
 
 const userSchemaModel = mongoose.model("userSchema", userSchema);
