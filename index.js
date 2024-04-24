@@ -2,11 +2,11 @@ const express = require("express");
 const app = express();
 const database = require("./src/database/connection")
 require('dotenv').config();
-const userRouter = require('./src/zuper/users/router/user.route')
+const router = require('./src/router/router')
 
 database();
 app.use(express.json());
-app.use(userRouter);
+app.use(router);
 
 let PORT = process.env.PORT;
 
