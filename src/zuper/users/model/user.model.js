@@ -6,6 +6,15 @@ const userSchema = new schema({
     type: Number,
     required: true,
   },
+  roleDetails: {
+    type: Object,
+    roleName: {
+      type: String,
+    },
+    roleID: {
+      type: String,
+    }
+  },
   empCode: { type: Number, unique: true },
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
@@ -20,11 +29,14 @@ const userSchema = new schema({
   workPhoneNumber: { type: String },
   homePhoneNumber: { type: String },
   mobilePhoneNumber: { type: String },
-  teamUid: {
-    type: String
+  profilePicture: {
+    type: String,
   },
-  externalLoginId: { 
-    type: String, 
+  teamUid: {
+    type: String,
+  },
+  externalLoginId: {
+    type: String,
   },
   workHours: {
     type: Object,
@@ -60,13 +72,14 @@ const userSchema = new schema({
         isEnabled: true,
       },
       saturday: { workingMins: null, isEnabled: false },
-      sunday: { workingMins: null, isEnabled: false } 
+      sunday: { workingMins: null, isEnabled: false },
     },
   },
   sendWelcomeEmail: { type: Boolean, default: false },
   accountActivation: {
-    type: Boolean, default: false
-  }
+    type: Boolean,
+    default: false,
+  },
 });
 
 const userSchemaModel = mongoose.model("userSchema", userSchema);

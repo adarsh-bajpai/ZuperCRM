@@ -32,11 +32,25 @@ exports.createUser = async (req, res) => {
     if (!isRolesValid) {
       throw new Error("Invalid Role");
     }
+    const roleId = req.body.roleId;
+    let roleDetails;
+
+    switch (roleId) {
+      case 1:
+        roleDetails = { roleName: "Admin", roleID: "A1" };
+        break;
+      case 2:
+        roleDetails = { roleName: "Employee", roleID: "A2" };
+        break;
+      default:
+        roleDetails = { roleName: "Visitor", roleID: "A3" };
+    }
 
     const nextEmpCode = await employeeCode();
 
     const userdetails = new userSchema({
       roleId: isRolesValid == true ? req.body.roleId : "Error",
+      roleDetails,
       firstName,
       lastName,
       email: emailIsValid == true ? req.body.email : "Error",
@@ -50,6 +64,9 @@ exports.createUser = async (req, res) => {
         externalLoginIdIsValid == true ? req.body.email : "Error",
       teamUid: generateUniqueID(),
       accountActivation: true,
+      profilePicture: `http://${
+        process.env.IMAGE_LOCAL
+      }${req.file.path.replaceAll("\\", "/")}`,
     });
 
     userdetails.empCode = nextEmpCode;
@@ -102,21 +119,23 @@ exports.updateSpecificUser = async (req, res) => {
   try {
     const getUserDetails = await userSchema.findOneAndUpdate(
       { _id: id },
-      { $set: {
-        firstName,
-        lastName,
-        designation,
-        workPhoneNumber,
-        homePhoneNumber,
-        mobilePhoneNumber,
-      } 
-    }, { new: true }
-  );
-  res.status(response.HTTP_ACCEPTED).json({
-    success: true,
-    message: "user updated successfully!",
-    data: getUserDetails
-  });
+      {
+        $set: {
+          firstName,
+          lastName,
+          designation,
+          workPhoneNumber,
+          homePhoneNumber,
+          mobilePhoneNumber,
+        },
+      },
+      { new: true }
+    );
+    res.status(response.HTTP_ACCEPTED).json({
+      success: true,
+      message: "user updated successfully!",
+      data: getUserDetails,
+    });
   } catch (error) {
     res
       .status(response.HTTP_BAD_REQUEST)
@@ -124,8 +143,7 @@ exports.updateSpecificUser = async (req, res) => {
   }
 };
 
-
-// Remove Specific User 
+// Remove Specific User
 
 exports.deactivateUser = async (req, res) => {
   const { id } = req.body;
@@ -135,8 +153,8 @@ exports.deactivateUser = async (req, res) => {
       { _id: id },
       {
         $set: {
-          accountActivation: false
-        }
+          accountActivation: false,
+        },
       },
       { new: true }
     );
@@ -149,4 +167,4 @@ exports.deactivateUser = async (req, res) => {
       .status(response.HTTP_BAD_REQUEST)
       .json({ success: false, message: error.message });
   }
-}
+};
